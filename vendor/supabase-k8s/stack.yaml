@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth
+  namespace: tenant-acme-7f3a
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+        supahost.io/tenant-id: acme-7f3a
+    spec:
+      serviceAccountName: tenant-sa
+      containers:
+        - name: auth
+          image: supabase/gotrue:latest
+          ports:
+            - containerPort: 9999
+          env:
+            - name: GOTRUE_DB_DATABASE_URL
+              value: postgres://postgres:$(POSTGRES_PASSWORD)@postgres:5432/postgres
+            - name: GOTRUE_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: tenant-secrets
+                  key: JWT_SECRET
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tenant-secrets
+                  key: POSTGRES_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth
+  namespace: tenant-acme-7f3a
+spec:
+  selector:
+    app: auth
+  ports:
+    - name: http
+      port: 9999
+      targetPort: 9999
