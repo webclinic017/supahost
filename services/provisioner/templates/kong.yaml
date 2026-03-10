@@ -1,0 +1,35 @@
+_format_version: "2.1"
+_transform: true
+
+services:
+  - name: rest
+    url: http://rest:3000
+    routes:
+      - name: rest
+        paths:
+          - /rest/v1
+        strip_path: false
+
+  - name: auth
+    url: http://auth:9999
+    routes:
+      - name: auth
+        paths:
+          - /auth/v1
+        strip_path: false
+
+  - name: realtime
+    url: http://realtime:4000
+    routes:
+      - name: realtime
+        paths:
+          - /realtime/v1
+        strip_path: false
+
+  - name: storage
+    url: http://storage:5000
+    routes:
+      - name: storage
+        paths:
+          - /storage/v1
+        strip_path: false

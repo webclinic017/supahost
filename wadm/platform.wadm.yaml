@@ -1,0 +1,2 @@
+# Optional reference manifest retained from the earlier wasmCloud-oriented version.
+# The supported local quickstart for this fixed repo uses the native Rust service in services/platform-api.

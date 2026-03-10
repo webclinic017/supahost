@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  passwordHash String
+  role         Role     @default(USER)
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  tenants      Tenant[]
+}
+
+model Tenant {
+  id        String   @id
+  ownerId   String
+  owner     User     @relation(fields: [ownerId], references: [id])
+
+  email     String
+  plan      String
+  status    String
+  desiredState String @default("active")
+  deploymentMode String @default("single")
+  activeDeploymentCount Int @default(0)
+  apiUrl    String?
+  gatewayUrl String?
+  consoleUrl String?
+
+  stripeCustomerId         String?
+  stripeSubscriptionId     String?
+  stripeCheckoutSessionId  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([ownerId])
+}

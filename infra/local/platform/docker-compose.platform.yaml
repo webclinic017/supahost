@@ -1,0 +1,24 @@
+networks:
+  supahost:
+    external: true
+
+volumes:
+  platform_db_data:
+
+services:
+  platform-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: platform
+      POSTGRES_PASSWORD: platform
+      POSTGRES_DB: platform
+    ports:
+      - "5433:5432"
+    volumes:
+      - platform_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U platform -d platform"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks: [supahost]

@@ -1,0 +1,13 @@
+.DS_Store
+target/
+build/
+**/build/
+.env
+.env.*
+tenants/
+data/
+
+# Next.js
+apps/web/node_modules/
+apps/web/.next/
+apps/web/.turbo/

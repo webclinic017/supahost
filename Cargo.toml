@@ -1,0 +1,7 @@
+[workspace]
+resolver = "2"
+members = [
+  "services/platform-api",
+  "services/billing-service",
+  "services/provisioner",
+]

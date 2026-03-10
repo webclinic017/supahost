@@ -1,0 +1,54 @@
+networks:
+  supahost:
+    external: true
+
+services:
+  web-migrate:
+    build:
+      context: ../../..
+      dockerfile: apps/web/Dockerfile
+      target: migrator
+    env_file:
+      - ../../../.env
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://platform:platform@platform-db:5432/platform?schema=public
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@local}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-adminadmin}
+    depends_on:
+      platform-db:
+        condition: service_healthy
+    networks: [supahost]
+
+  web:
+    build:
+      context: ../../..
+      dockerfile: apps/web/Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - ../../../.env
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://platform:platform@platform-db:5432/platform?schema=public
+      NEXTAUTH_URL: http://localhost:3000
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-dev-secret-change-me}
+      PLATFORM_API_URL: http://host.docker.internal:8000
+      PLATFORM_ADMIN_TOKEN: ${PLATFORM_ADMIN_TOKEN:-dev-admin-token-change-me}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@local}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-adminadmin}
+      PUBLIC_WEB_BASE_URL: ${PUBLIC_WEB_BASE_URL:-http://localhost:3000}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      platform-db:
+        condition: service_healthy
+      web-migrate:
+        condition: service_completed_successfully
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=supahost
+      - traefik.http.routers.platform-ui.rule=Host(`localhost`)
+      - traefik.http.routers.platform-ui.service=platform-ui
+      - traefik.http.services.platform-ui.loadbalancer.server.port=3000
+    networks: [supahost]

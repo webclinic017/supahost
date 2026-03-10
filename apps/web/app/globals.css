@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  @apply bg-white text-slate-900;
+}
+
+.dark body {
+  @apply bg-slate-950 text-slate-50;
+}
+
+/* Simple app-wide container */
+.container {
+  @apply mx-auto max-w-6xl px-4;
+}

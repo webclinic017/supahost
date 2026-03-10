@@ -1,0 +1,10 @@
+name = "platform-api"
+language = "rust"
+type = "component"
+version = "0.1.0"
+
+[component]
+# The WIT world in wit/world.wit
+wit_world = "platform-api"
+# wasmCloud uses WASI Preview 2 components
+wasm_target = "wasm32-wasi-preview2"

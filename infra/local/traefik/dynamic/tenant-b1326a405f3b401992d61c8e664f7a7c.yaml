@@ -1,0 +1,12 @@
+http:
+  routers:
+    tenant-b1326a405f3b401992d61c8e664f7a7c:
+      rule: Host(`b1326a40-5f3b-4019-92d6-1c8e664f7a7c.supabase.localhost`)
+      entryPoints:
+        - web
+      service: tenant-b1326a405f3b401992d61c8e664f7a7c
+  services:
+    tenant-b1326a405f3b401992d61c8e664f7a7c:
+      loadBalancer:
+        servers:
+          - url: http://tb1326a405f-supabase-kong:8000

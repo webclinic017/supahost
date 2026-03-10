@@ -1,0 +1,12 @@
+http:
+  routers:
+    platform-ui:
+      rule: Host(`localhost`)
+      entryPoints:
+        - web
+      service: platform-ui
+  services:
+    platform-ui:
+      loadBalancer:
+        servers:
+          - url: http://web:3000
