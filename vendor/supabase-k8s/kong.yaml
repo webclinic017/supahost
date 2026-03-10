@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kong
+  namespace: tenant-acme-7f3a
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kong
+  template:
+    metadata:
+      labels:
+        app: kong
+        supahost.io/tenant-id: acme-7f3a
+    spec:
+      serviceAccountName: tenant-sa
+      containers:
+        - name: kong
+          image: kong:3.6
+          ports:
+            - containerPort: 8000
+          env:
+            - name: KONG_DATABASE
+              value: "off"
+            - name: KONG_DECLARATIVE_CONFIG
+              value: /etc/kong/kong.yml
+          volumeMounts:
+            - name: kong-config
+              mountPath: /etc/kong
+      volumes:
+        - name: kong-config
+          configMap:
+            name: kong-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kong
+  namespace: tenant-acme-7f3a
+spec:
+  selector:
+    app: kong
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 8000
