@@ -1,6 +1,9 @@
 # SupaHost Platform — single-slot deployments + shared tenant UI
 
+This platform can be used as a template for building next-generation ephemeral compute platform as a service with hardened multi-tenancy
 This repository is the revised, runnable starter for a multi-tenant **Supabase hosting** platform with:
+# TODO
+- **Create Kubernetes Operator https://kubernetes.io/docs/concepts/security/multi-tenancy/
 
 - **actual upstream Supabase self-hosting assets** vendored under `vendor/supabase-docker/`
 - **Next.js + TypeScript + shadcn-style UI** for customer signup/login, shared tenant console, and admin console
